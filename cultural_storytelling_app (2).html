@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cultural Story Weaver</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f8f6f1;
+    --bg2: #ffffff;
+    --border: rgba(0,0,0,0.1);
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #3C3489;
+    --accent-light: #EEEDFE;
+    --accent-mid: #534AB7;
+    --teal-bg: #E1F5EE;
+    --teal-text: #085041;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .hero {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 0.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '◈';
+    position: absolute;
+    right: 1.5rem;
+    top: 0.5rem;
+    font-size: 80px;
+    opacity: 0.05;
+    color: var(--text);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .hero p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .panel {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .full { grid-column: 1 / -1; }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+
+  select, input[type="text"] {
+    width: 100%;
+    padding: 9px 12px;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  select:focus, input:focus {
+    outline: 2px solid var(--accent-mid);
+    outline-offset: 1px;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    cursor: pointer;
+    background: var(--bg);
+    color: var(--muted);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .tag:hover { background: var(--accent-light); }
+  .tag.active {
+    background: var(--accent);
+    color: #CECBF6;
+    border-color: var(--accent-mid);
+  }
+
+  .btn-generate {
+    width: 100%;
+    padding: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-light);
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-generate:hover { background: var(--accent-mid); }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .story-card {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: none;
+  }
+
+  .story-card.visible { display: block; }
+
+  .story-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .badge-c { background: var(--teal-bg); color: var(--teal-text); }
+  .badge-t { background: var(--accent-light); color: var(--accent); }
+
+  .story-actions { display: flex; gap: 8px; }
+
+  .icon-btn {
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 11px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .icon-btn:hover { background: var(--bg); color: var(--text); }
+
+  .story-body { padding: 1.5rem; }
+
+  .story-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    min-height: 28px;
+  }
+
+  .story-text {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--muted);
+    white-space: pre-wrap;
+    min-height: 40px;
+  }
+
+  .story-text.streaming::after {
+    content: '▌';
+    animation: blink 0.7s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .audio-bar {
+    padding: 1rem 1.25rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg);
+  }
+
+  .play-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    font-size: 16px;
+    transition: background 0.15s;
+  }
+
+  .play-btn:hover { background: var(--accent-mid); }
+  .play-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .audio-info { flex: 1; }
+
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-mid);
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  .audio-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .dots { display: inline-flex; gap: 3px; align-items: center; }
+  .dots span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #CECBF6;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2rem;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <h1>◯ Cultural Story Weaver</h1>
+    <p>AI-generated stories rooted in world traditions · Powered by Claude API</p>
+  </div>
+
+  <div class="panel">
+    <div class="grid2">
+      <div>
+        <label>Culture / Origin</label>
+        <select id="culture">
+          <option value="West African (Yoruba)">West African — Yoruba</option>
+          <option value="Japanese (Shinto)">Japanese — Shinto</option>
+          <option value="Indian (Vedic)">Indian — Vedic</option>
+          <option value="Norse (Viking)">Norse — Viking</option>
+          <option value="Mesoamerican (Aztec)">Mesoamerican — Aztec</option>
+          <option value="Aboriginal Australian">Aboriginal Australian</option>
+          <option value="Celtic (Irish)">Celtic — Irish</option>
+          <option value="Ancient Egyptian">Ancient Egyptian</option>
+          <option value="Persian (Zoroastrian)">Persian — Zoroastrian</option>
+          <option value="Andean (Incan)">Andean — Incan</option>
+        </select>
+      </div>
+      <div>
+        <label>Story Tone</label>
+        <select id="tone">
+          <option value="mythic and poetic">Mythic &amp; poetic</option>
+          <option value="cautionary and wise">Cautionary &amp; wise</option>
+          <option value="adventurous and heroic">Adventurous &amp; heroic</option>
+          <option value="gentle and lyrical">Gentle &amp; lyrical</option>
+          <option value="humorous and trickster-like">Humorous &amp; trickster</option>
+          <option value="solemn and ceremonial">Solemn &amp; ceremonial</option>
+        </select>
+      </div>
+      <div class="full">
+        <label>Themes (select one or more)</label>
+        <div class="tag-row" id="tags">
+          <span class="tag active" data-val="origins of the world">Origins of the world</span>
+          <span class="tag" data-val="love and sacrifice">Love &amp; sacrifice</span>
+          <span class="tag" data-val="courage and trials">Courage &amp; trials</span>
+          <span class="tag" data-val="nature spirits and animals">Nature spirits</span>
+          <span class="tag" data-val="trickery and wisdom">Trickery &amp; wisdom</span>
+          <span class="tag" data-val="death and the afterlife">Death &amp; afterlife</span>
+          <span class="tag" data-val="light conquering darkness">Light &amp; darkness</span>
+          <span class="tag" data-val="the power of memory and ancestors">Ancestors &amp; memory</span>
+        </div>
+      </div>
+      <div class="full">
+        <label>Custom prompt (optional)</label>
+        <input type="text" id="custom" placeholder="e.g. include a river goddess and a lost child…" />
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-generate" id="genBtn" onclick="generateStory()">✦ Generate story</button>
+
+  <div class="story-card" id="storyCard">
+    <div class="story-header">
+      <div class="badges">
+        <span class="badge badge-c" id="badgeCulture"></span>
+        <span class="badge badge-t" id="badgeTone"></span>
+      </div>
+      <div class="story-actions">
+        <button class="icon-btn" onclick="copyStory()">⎘ Copy</button>
+        <button class="icon-btn" onclick="newStory()">↺ New story</button>
+      </div>
+    </div>
+    <div class="story-body">
+      <div class="story-title" id="storyTitle"></div>
+      <div class="story-text" id="storyText"></div>
+    </div>
+    <div class="audio-bar">
+      <button class="play-btn" id="playBtn" onclick="speakStory()" disabled title="Read aloud">▶</button>
+      <div class="audio-info">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="audio-label" id="audioLabel">Ready to narrate via browser speech</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>Member 2 · AI Integration · Story API + Audio Narration · Prototype</footer>
+
+</div>
+<script>
+  const GROQ_API_KEY = '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'; // ← Apni Groq key yahan paste karo (gsk_...)
+
+  let activeTags = new Set(['origins of the world']);
+  let currentStory = '';
+  let speaking = false;
+  let utterance = null;
+
+  document.querySelectorAll('.tag').forEach(t => {
+    t.addEventListener('click', () => {
+      const v = t.dataset.val;
+      if (activeTags.has(v)) {
+        if (activeTags.size === 1) return;
+        activeTags.delete(v);
+        t.classList.remove('active');
+      } else {
+        activeTags.add(v);
+        t.classList.add('active');
+      }
+    });
+  });
+
+  async function generateStory() {
+    if (!GROQ_API_KEY) {
+      alert('Apni Groq API key paste karo file mein — GROQ_API_KEY variable mein.');
+      return;
+    }
+    const culture = document.getElementById('culture').value;
+    const tone = document.getElementById('tone').value;
+    const themes = Array.from(activeTags).join(', ');
+    const custom = document.getElementById('custom').value.trim();
+    const btn = document.getElementById('genBtn');
+    const card = document.getElementById('storyCard');
+    const titleEl = document.getElementById('storyTitle');
+    const textEl = document.getElementById('storyText');
+    const playBtn = document.getElementById('playBtn');
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="dots"><span></span><span></span><span></span></span> &nbsp;Weaving tale…`;
+    card.classList.add('visible');
+    document.getElementById('badgeCulture').textContent = culture;
+    document.getElementById('badgeTone').textContent = tone;
+    titleEl.textContent = '';
+    textEl.textContent = '';
+    textEl.classList.add('streaming');
+    playBtn.disabled = true;
+    document.getElementById('audioLabel').textContent = 'Generating…';
+    document.getElementById('progressFill').style.width = '0%';
+
+    const prompt = `You are a master cultural storyteller. Write an original short story (260-330 words) deeply rooted in ${culture} tradition.
+
+Tone: ${tone}
+Themes: ${themes}
+${custom ? `Additional details: ${custom}` : ''}
+
+Format your response exactly as:
+TITLE: [a beautiful evocative title]
+STORY:
+[the story, in flowing prose, rich with cultural imagery, metaphor and authentic voice]
+
+No preamble, no commentary outside this format.`;
+
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          max_tokens: 1000,
+          messages: [
+            { role: 'system', content: 'You are a master cultural storyteller who writes vivid, authentic stories.' },
+            { role: 'user', content: prompt }
+          ]
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+
+      const fullText = data.choices?.[0]?.message?.content || '';
+
+      const tm = fullText.match(/TITLE:\s*(.+?)(?:\n|STORY:)/s);
+      if (tm) titleEl.textContent = tm[1].trim();
+
+      const sm = fullText.match(/STORY:\s*([\s\S]+)/);
+      if (sm) textEl.textContent = sm[1].trim();
+
+      currentStory = textEl.textContent.trim();
+      textEl.classList.remove('streaming');
+      playBtn.disabled = false;
+      document.getElementById('audioLabel').textContent = 'Click ▶ to hear this story narrated';
+
+    } catch(err) {
+      textEl.textContent = 'Story generate nahi hui. API key check karo aur dobara try karo.\n\nError: ' + err.message;
+      textEl.classList.remove('streaming');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '✦ Generate story';
+  }
+
+  function newStory() {
+    document.getElementById('storyCard').classList.remove('visible');
+    currentStory = '';
+  }
+
+  function speakStory() {
+    if (!currentStory) return;
+    const playBtn = document.getElementById('playBtn');
+    const label = document.getElementById('audioLabel');
+    const fill = document.getElementById('progressFill');
+
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      speaking = false;
+      playBtn.textContent = '▶';
+      label.textContent = 'Narration stopped';
+      fill.style.width = '0%';
+      return;
+    }
+
+    utterance = new SpeechSynthesisUtterance(currentStory);
+    utterance.rate = 0.88;
+    utterance.pitch = 1.0;
+
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v =>
+      v.name.includes('Samantha') || v.name.includes('Karen') ||
+      v.name.includes('Daniel') || (v.lang === 'en-GB' && v.localService)
+    );
+    if (preferred) utterance.voice = preferred;
+
+    utterance.onstart = () => {
+      speaking = true;
+      playBtn.textContent = '⏸';
+      label.textContent = 'Narrating…';
+      animateProgress();
+    };
+
+    utterance.onend = () => {
+      speaking = false;
+      playBtn.textContent = '▶';
+      label.textContent = 'Narration complete ✓';
+      fill.style.width = '100%';
+      setTimeout(() => {
+        fill.style.width = '0%';
+        label.textContent = 'Click ▶ to hear this story again';
+      }, 2500);
+    };
+
+    utterance.onerror = () => {
+      speaking = false;
+      playBtn.textContent = '▶';
+      label.textContent = 'Speech unavailable — try Chrome or Safari';
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function animateProgress() {
+    const fill = document.getElementById('progressFill');
+    let pct = 0;
+    const iv = setInterval(() => {
+      if (!speaking) { clearInterval(iv); return; }
+      pct = Math.min(pct + 0.25, 96);
+      fill.style.width = pct + '%';
+    }, 200);
+  }
+
+  function copyStory() {
+    const title = document.getElementById('storyTitle').textContent;
+    const text = document.getElementById('storyText').textContent;
+    if (!text) return;
+    navigator.clipboard.writeText(title + '\n\n' + text).then(() => {
+      const btn = event.currentTarget;
+      btn.textContent = '✓ Copied';
+      setTimeout(() => { btn.textContent = '⎘ Copy'; }, 1600);
+    });
+  }
+
+  window.speechSynthesis?.getVoices();
+</script>
+</body>
+</html>
