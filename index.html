@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cultural Story Weaver</title>
+<title>Cultural Story Weaver<div style="text-align:right; padding: 10px 20px; background: #3C3489;">
+  <span id="userName" style="color:white; margin-right:10px; font-size:14px;"></span>
+  <button id="loginBtn" onclick="googleLogin()" style="background:white; color:#3C3489; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:500;">
+    🔵 Login with Google
+  </button>
+  <button id="logoutBtn" onclick="googleLogout()" style="background:#ff4444; color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; display:none;">
+    Logout
+  </button>
+</div>
+</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
