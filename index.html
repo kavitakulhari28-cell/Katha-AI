@@ -303,6 +303,16 @@
 <div class="container">
 
   <div class="hero">
+   <!-- Login Section -->
+<div style="text-align:right; padding: 10px 20px; background: #3C3489;">
+  <span id="userName" style="color:white; margin-right:10px; font-size:14px;"></span>
+  <button id="loginBtn" onclick="googleLogin()" style="background:white; color:#3C3489; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:500;">
+    🔵 Login with Google
+  </button>
+  <button id="logoutBtn" onclick="googleLogout()" style="background:#ff4444; color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; display:none;">
+    Logout
+  </button>
+</div>
     <h1>◯ Cultural Story Weaver</h1>
     <p>AI-generated stories rooted in world traditions · Powered by Claude API</p>
   </div>
@@ -571,6 +581,55 @@ No preamble, no commentary outside this format.`;
   }
 
   window.speechSynthesis?.getVoices();
+</script>
+
+<!-- Firebase Login -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBsGxo4pnvx4MQdJ5-RlmZ9fXiyJpuUMjM",
+    authDomain: "kathaai-4997a.firebaseapp.com",
+    projectId: "kathaai-4997a",
+    storageBucket: "kathaai-4997a.firebasestorage.app",
+    messagingSenderId: "658101928794",
+    appId: "1:658101928794:web:b8cbfad848a2d85752e963"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // Login button
+  window.googleLogin = async function() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      document.getElementById('userName').textContent = 'Welcome, ' + user.displayName;
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'block';
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  // Logout button
+  window.googleLogout = async function() {
+    await signOut(auth);
+    document.getElementById('userName').textContent = '';
+    document.getElementById('loginBtn').style.display = 'block';
+    document.getElementById('logoutBtn').style.display = 'none';
+  }
+
+  // Check login state
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('userName').textContent = 'Welcome, ' + user.displayName;
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'block';
+    }
+  });
 </script>
 </body>
 </html>
