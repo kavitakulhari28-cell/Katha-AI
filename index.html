@@ -308,8 +308,15 @@
   }
 </style>
 </head>
+</div>
 <body>
-<div class="container">
+<div id="loginPage" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background:#3C3489; text-align:center;">
+  <h1 style="color:gold; font-family:'Playfair Display',serif; font-size:48px; margin-bottom:10px;">◯ KathaAI</h1>
+  <p style="color:white; font-size:18px; margin-bottom:40px;">Bringing Culture Back to Life Through AI</p>
+  <button onclick="googleLogin()" style="background:white; color:#3C3489; border:none; padding:14px 32px; border-radius:30px; font-size:16px; font-weight:600; cursor:pointer;">🔵 Login with Google</button>
+</div>
+
+<div id="mainApp" style="display:none;"><div class="container">
 
   <div class="hero">
    <!-- Login Section -->
@@ -618,6 +625,8 @@ No preamble, no commentary outside this format.`;
       document.getElementById('userName').textContent = 'Welcome, ' + user.displayName;
       document.getElementById('loginBtn').style.display = 'none';
       document.getElementById('logoutBtn').style.display = 'block';
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
     } catch(e) {
       console.error(e);
     }
@@ -629,6 +638,9 @@ No preamble, no commentary outside this format.`;
     document.getElementById('userName').textContent = '';
     document.getElementById('loginBtn').style.display = 'block';
     document.getElementById('logoutBtn').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('mainApp').style.display = 'none';
+    
   }
 
   // Check login state
