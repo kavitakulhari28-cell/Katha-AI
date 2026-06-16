@@ -306,7 +306,37 @@
     margin-top: 2rem;
     opacity: 0.7;
   }
-</style>
+/* Character Animation */
+.character-box {
+  text-align: center;
+  padding: 20px;
+  display: none;
+}
+
+.character {
+  font-size: 80px;
+  display: inline-block;
+  animation: dance 1s ease-in-out infinite alternate;
+}
+
+.character.walk {
+  animation: walk 1s ease-in-out infinite alternate;
+}
+
+@keyframes dance {
+  0% { transform: rotate(-10deg) scale(1); }
+  100% { transform: rotate(10deg) scale(1.1); }
+}
+
+@keyframes walk {
+  0% { transform: translateX(-10px); }
+  100% { transform: translateX(10px); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-15px); }
+}</style>
 </head>
 </div>
 <body>
@@ -383,7 +413,11 @@
 
   <button class="btn-generate" id="genBtn" onclick="generateStory()">✦ Generate story</button>
 
-  <div class="story-card" id="storyCard">
+  <div<!-- Character Animation Box -->
+<div class="character-box" id="characterBox">
+  <div class="character" id="characterEmoji">🧙</div>
+  <p style="color: var(--muted); font-size: 13px; margin-top: 8px;" id="characterName">Storyteller</p>
+</div> class="story-card" id="storyCard">
     <div class="story-header">
       <div class="badges">
         <span class="badge badge-c" id="badgeCulture"></span>
@@ -504,6 +538,31 @@ No preamble, no commentary outside this format.`;
       if (sm) textEl.textContent = sm[1].trim();
 
       currentStory = textEl.textContent.trim();
+      // Character animation
+const characters = {
+  'West African': { emoji: '🥁', name: 'Yoruba Drummer', anim: 'dance' },
+  'Japanese': { emoji: '⛩️', name: 'Shinto Priest', anim: 'float' },
+  'Indian': { emoji: '💃', name: 'Indian Dancer', anim: 'dance' },
+  'Norse': { emoji: '⚔️', name: 'Viking Warrior', anim: 'walk' },
+  'Mesoamerican': { emoji: '🦅', name: 'Aztec Eagle', anim: 'float' },
+  'Aboriginal': { emoji: '🪃', name: 'Aboriginal Elder', anim: 'walk' },
+  'Celtic': { emoji: '🍀', name: 'Celtic Druid', anim: 'dance' },
+  'Egyptian': { emoji: '𓂀', name: 'Egyptian Pharaoh', anim: 'walk' },
+  'Persian': { emoji: '🌙', name: 'Persian Mystic', anim: 'float' },
+  'Andean': { emoji: '🦙', name: 'Incan Llama', anim: 'walk' }
+};
+
+const selectedCulture = culture.split(' ')[0];
+const char = characters[selectedCulture] || { emoji: '📖', name: 'Storyteller', anim: 'dance' };
+
+const charBox = document.getElementById('characterBox');
+const charEmoji = document.getElementById('characterEmoji');
+const charName = document.getElementById('characterName');
+
+charEmoji.textContent = char.emoji;
+charEmoji.className = 'character ' + char.anim;
+charName.textContent = char.name;
+charBox.style.display = 'block';
       textEl.classList.remove('streaming');
       playBtn.disabled = false;
       document.getElementById('audioLabel').textContent = 'Click ▶ to hear this story narrated';
