@@ -654,7 +654,7 @@ charBox.style.display = 'block';
 
   for (let i = 0; i < scenes.length; i++) {
     try {
-      const res = await fetch('https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0', {
+      const res = await fetch('https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-xl-base-1.0', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${HF_API_KEY}`,
