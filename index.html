@@ -327,7 +327,60 @@
 @keyframes float {
   0% { transform: translateY(0px); }
   100% { transform: translateY(-15px); }
-}</style>
+}/* AI Image Slideshow */
+.slideshow-box {
+  margin-top: 1rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 0.5px solid var(--border);
+  background: var(--bg2);
+  display: none;
+}
+
+.slideshow-images {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: #1a1a1a;
+}
+
+.slide-img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.slide-img.active { opacity: 1; }
+
+.slideshow-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 280px;
+  color: var(--muted);
+  font-size: 13px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.slideshow-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+}
+
+.slide-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.slide-dot.active { background: var(--accent-mid); }</style>
 </head>
 </div>
 <body>
@@ -430,12 +483,21 @@
         <span class="audio-label" id="audioLabel">Ready to narrate via browser speech</span>
       </div>
     </div>
-  </div>
+  </div><div class="slideshow-box" id="slideshowBox">
+      <div class="slideshow-images" id="slideshowImages">
+        <div class="slideshow-loading" id="slideshowLoading">
+          <div class="dots"><span></span><span></span><span></span></div>
+          Generating illustrations...
+        </div>
+      </div>
+      <div class="slideshow-dots" id="slideshowDots"></div>
+    </div>
 
   <footer>Member 2 · AI Integration · Story API + Audio Narration · Prototype</footer>
 
 </div>
 <script>
+ const HF_API_KEY = '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'; // ← Apni Hugging Face key yahan paste karo (hf_...)
   const GROQ_API_KEY = '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'; // ← Apni Groq key yahan paste karo (gsk_...)
 
   let activeTags = new Set(['origins of the world']);
