@@ -652,25 +652,34 @@ charBox.style.display = 'block';
   imagesDiv.innerHTML = `<div class="slideshow-loading" id="slideshowLoading"><div class="dots"><span></span><span></span><span></span></div>Loading illustrations (<span id="loadCount">0</span>/${numImages})...</div>`;
   dotsDiv.innerHTML = '';
 
-  const preloadPromises = urls.map((url, i) => {
+ function loadOneImage(url) {
     return new Promise((resolve) => {
       const img = new Image();
+      const timeout = setTimeout(() => resolve(null), 15000);
       img.onload = () => {
+        clearTimeout(timeout);
         loadedCount++;
         const counter = document.getElementById('loadCount');
         if (counter) counter.textContent = loadedCount;
         resolve(url);
       };
       img.onerror = () => {
+        clearTimeout(timeout);
         loadedCount++;
+        const counter = document.getElementById('loadCount');
+        if (counter) counter.textContent = loadedCount;
         resolve(null);
       };
       img.src = url;
     });
-  });
+  }
 
-  const loadedUrls = (await Promise.all(preloadPromises)).filter(u => u !== null);
-
+  const loadedUrls = [];
+  for (let i = 0; i < urls.length; i += 3) {
+    const batch = urls.slice(i, i + 3);
+    const results = await Promise.all(batch.map(loadOneImage));
+    loadedUrls.push(...results.filter(u => u !== null));
+  }
   if (loadedUrls.length === 0) {
     imagesDiv.innerHTML = `<div class="slideshow-loading">Could not load illustrations</div>`;
     return;
