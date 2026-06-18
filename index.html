@@ -637,12 +637,13 @@ charBox.style.display = 'block';
   imagesDiv.innerHTML = `<div class="slideshow-loading" id="slideshowLoading"><div class="dots"><span></span><span></span><span></span></div>Generating illustrations...</div>`;
   dotsDiv.innerHTML = '';
 
-  const scenes = [
-    `${culture} mythology art, ${story.slice(0, 120)}`,
-    `${culture} mythology art, ${story.slice(Math.floor(story.length/2), Math.floor(story.length/2)+120)}`,
-    `${culture} mythology art, ${story.slice(-120)}`
-  ];
-
+  const numImages = 12;
+  const chunkSize = Math.floor(story.length / numImages);
+  const scenes = [];
+  for (let i = 0; i < numImages; i++) {
+    const chunk = story.slice(i * chunkSize, (i + 1) * chunkSize);
+    scenes.push(`${culture} mythology art style, cinematic illustration: ${chunk}`);
+  }
   const images = scenes.map((scene, i) => {
     const cleanPrompt = encodeURIComponent(scene.replace(/[^\w\s,.]/g, ' ').slice(0, 200));
     return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=500&seed=${Date.now() + i}&nologo=true`;
