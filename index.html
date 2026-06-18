@@ -634,8 +634,6 @@ charBox.style.display = 'block';
   const dotsDiv = document.getElementById('slideshowDots');
 
   box.style.display = 'block';
-  imagesDiv.innerHTML = `<div class="slideshow-loading" id="slideshowLoading"><div class="dots"><span></span><span></span><span></span></div>Generating illustrations...</div>`;
-  dotsDiv.innerHTML = '';
 
   const numImages = 12;
   const chunkSize = Math.floor(story.length / numImages);
@@ -644,16 +642,45 @@ charBox.style.display = 'block';
     const chunk = story.slice(i * chunkSize, (i + 1) * chunkSize);
     scenes.push(`${culture} mythology art style, cinematic illustration: ${chunk}`);
   }
-  const images = scenes.map((scene, i) => {
+
+  const urls = scenes.map((scene, i) => {
     const cleanPrompt = encodeURIComponent(scene.replace(/[^\w\s,.]/g, ' ').slice(0, 200));
     return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=500&seed=${Date.now() + i}&nologo=true`;
   });
 
-  imagesDiv.innerHTML = images.map((url, i) =>
-    `<img src="${url}" class="slide-img${i === 0 ? ' active' : ''}" onerror="this.style.display='none'" />`
+  let loadedCount = 0;
+  imagesDiv.innerHTML = `<div class="slideshow-loading" id="slideshowLoading"><div class="dots"><span></span><span></span><span></span></div>Loading illustrations (<span id="loadCount">0</span>/${numImages})...</div>`;
+  dotsDiv.innerHTML = '';
+
+  const preloadPromises = urls.map((url, i) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        loadedCount++;
+        const counter = document.getElementById('loadCount');
+        if (counter) counter.textContent = loadedCount;
+        resolve(url);
+      };
+      img.onerror = () => {
+        loadedCount++;
+        resolve(null);
+      };
+      img.src = url;
+    });
+  });
+
+  const loadedUrls = (await Promise.all(preloadPromises)).filter(u => u !== null);
+
+  if (loadedUrls.length === 0) {
+    imagesDiv.innerHTML = `<div class="slideshow-loading">Could not load illustrations</div>`;
+    return;
+  }
+
+  imagesDiv.innerHTML = loadedUrls.map((url, i) =>
+    `<img src="${url}" class="slide-img${i === 0 ? ' active' : ''}" />`
   ).join('');
 
-  dotsDiv.innerHTML = images.map((_, i) =>
+  dotsDiv.innerHTML = loadedUrls.map((_, i) =>
     `<div class="slide-dot${i === 0 ? ' active' : ''}"></div>`
   ).join('');
 
@@ -667,9 +694,8 @@ charBox.style.display = 'block';
     current = (current + 1) % imgs.length;
     imgs[current].classList.add('active');
     dots[current].classList.add('active');
-  }, 4000);
+  }, 3500);
 }
-
   function newStory() {
     document.getElementById('storyCard').classList.remove('visible');
     currentStory = '';
