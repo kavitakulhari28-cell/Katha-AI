@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</title>
+<title>KathaAI — Cultural Story Weaver</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
@@ -297,208 +297,225 @@
     margin-top: 2rem;
     opacity: 0.7;
   }
-/* Character Animation */
-.character-box {
-  text-align: center;
-  padding: 20px;
-  display: none;
-}
 
-.character {
-  font-size: 80px;
-  display: inline-block;
-  animation: dance 1s ease-in-out infinite alternate;
-}
+  /* Character Animation */
+  .character-box {
+    text-align: center;
+    padding: 20px;
+    display: none;
+  }
 
-.character.walk {
-  animation: walk 1s ease-in-out infinite alternate;
-}
+  .character {
+    font-size: 80px;
+    display: inline-block;
+    animation: dance 1s ease-in-out infinite alternate;
+  }
 
-@keyframes dance {
-  0% { transform: rotate(-10deg) scale(1); }
-  100% { transform: rotate(10deg) scale(1.1); }
-}
+  .character.walk {
+    animation: walk 1s ease-in-out infinite alternate;
+  }
 
-@keyframes walk {
-  0% { transform: translateX(-10px); }
-  100% { transform: translateX(10px); }
-}
+  .character.float {
+    animation: float 1.5s ease-in-out infinite alternate;
+  }
 
-@keyframes float {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-15px); }
-}/* AI Image Slideshow */
-.slideshow-box {
-  margin-top: 1rem;
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 0.5px solid var(--border);
-  background: var(--bg2);
-  display: none;
-}
+  @keyframes dance {
+    0% { transform: rotate(-10deg) scale(1); }
+    100% { transform: rotate(10deg) scale(1.1); }
+  }
 
-.slideshow-images {
-  position: relative;
-  width: 100%;
-  height: 280px;
-  background: #1a1a1a;
-}
+  @keyframes walk {
+    0% { transform: translateX(-10px); }
+    100% { transform: translateX(10px); }
+  }
 
-.slide-img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1.2s ease-in-out;
-}
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-15px); }
+  }
 
-.slide-img.active { opacity: 1; }
+  /* AI Image Slideshow */
+  .slideshow-box {
+    margin-top: 1rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+    background: var(--bg2);
+    display: none;
+  }
 
-.slideshow-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 280px;
-  color: var(--muted);
-  font-size: 13px;
-  flex-direction: column;
-  gap: 10px;
-}
+  .slideshow-images {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    background: #1a1a1a;
+  }
 
-.slideshow-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px;
-}
+  .slide-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+  }
 
-.slide-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--border);
-}
+  .slide-img.active { opacity: 1; }
 
-.slide-dot.active { background: var(--accent-mid); }</style>
+  .slideshow-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+    color: var(--muted);
+    font-size: 13px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .slideshow-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+  }
+
+  .slide-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .slide-dot.active { background: var(--accent-mid); }
+</style>
 </head>
-</div>
 <body>
+
+<!-- LOGIN PAGE -->
 <div id="loginPage" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background:#3C3489; text-align:center;">
   <h1 style="color:gold; font-family:'Playfair Display',serif; font-size:48px; margin-bottom:10px;">◯ KathaAI</h1>
   <p style="color:white; font-size:18px; margin-bottom:40px;">Bringing Culture Back to Life Through AI</p>
   <button onclick="googleLogin()" style="background:white; color:#3C3489; border:none; padding:14px 32px; border-radius:30px; font-size:16px; font-weight:600; cursor:pointer;">🔵 Login with Google</button>
 </div>
 
-<div id="mainApp" style="display:none;"><div class="container">
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none;">
+  <div class="container">
 
-  <div class="hero">
-   <!-- Login Section -->
-<div style="text-align:right; padding: 10px 20px; background: #3C3489;">
-  <span id="userName" style="color:white; margin-right:10px; font-size:14px;"></span>
-  <button id="loginBtn" onclick="googleLogin()" style="background:white; color:#3C3489; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:500;">
-    🔵 Login with Google
-  </button>
-  <button id="logoutBtn" onclick="googleLogout()" style="background:#ff4444; color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; display:none;">
-    Logout
-  </button>
-</div>
-    <h1>◯ Cultural Story Weaver</h1>
-    <p>AI-generated stories rooted in world traditions · Powered by Claude API</p>
-  </div>
+    <div class="hero">
+      <!-- Login Section -->
+      <div style="text-align:right; margin-bottom: 12px;">
+        <span id="userName" style="color:var(--muted); margin-right:10px; font-size:13px;"></span>
+        <button id="logoutBtn" onclick="googleLogout()" style="background:#ff4444; color:white; border:none; padding:6px 14px; border-radius:20px; cursor:pointer; font-size:12px;">
+          Logout
+        </button>
+      </div>
+      <h1>◯ Cultural Story Weaver</h1>
+      <p>AI-generated stories rooted in world traditions · Powered by AI</p>
+    </div>
 
-  <div class="panel">
-    <div class="grid2">
-      <div>
-        <label>Culture / Origin</label>
-        <select id="culture">
-          <option value="West African (Yoruba)">West African — Yoruba</option>
-          <option value="Japanese (Shinto)">Japanese — Shinto</option>
-          <option value="Indian (Vedic)">Indian — Vedic</option>
-          <option value="Norse (Viking)">Norse — Viking</option>
-          <option value="Mesoamerican (Aztec)">Mesoamerican — Aztec</option>
-          <option value="Aboriginal Australian">Aboriginal Australian</option>
-          <option value="Celtic (Irish)">Celtic — Irish</option>
-          <option value="Ancient Egyptian">Ancient Egyptian</option>
-          <option value="Persian (Zoroastrian)">Persian — Zoroastrian</option>
-          <option value="Andean (Incan)">Andean — Incan</option>
-        </select>
-      </div>
-      <div>
-        <label>Story Tone</label>
-        <select id="tone">
-          <option value="mythic and poetic">Mythic &amp; poetic</option>
-          <option value="cautionary and wise">Cautionary &amp; wise</option>
-          <option value="adventurous and heroic">Adventurous &amp; heroic</option>
-          <option value="gentle and lyrical">Gentle &amp; lyrical</option>
-          <option value="humorous and trickster-like">Humorous &amp; trickster</option>
-          <option value="solemn and ceremonial">Solemn &amp; ceremonial</option>
-        </select>
-      </div>
-      <div class="full">
-        <label>Themes (select one or more)</label>
-        <div class="tag-row" id="tags">
-          <span class="tag active" data-val="origins of the world">Origins of the world</span>
-          <span class="tag" data-val="love and sacrifice">Love &amp; sacrifice</span>
-          <span class="tag" data-val="courage and trials">Courage &amp; trials</span>
-          <span class="tag" data-val="nature spirits and animals">Nature spirits</span>
-          <span class="tag" data-val="trickery and wisdom">Trickery &amp; wisdom</span>
-          <span class="tag" data-val="death and the afterlife">Death &amp; afterlife</span>
-          <span class="tag" data-val="light conquering darkness">Light &amp; darkness</span>
-          <span class="tag" data-val="the power of memory and ancestors">Ancestors &amp; memory</span>
+    <div class="panel">
+      <div class="grid2">
+        <div>
+          <label>Culture / Origin</label>
+          <select id="culture">
+            <option value="West African (Yoruba)">West African — Yoruba</option>
+            <option value="Japanese (Shinto)">Japanese — Shinto</option>
+            <option value="Indian (Vedic)">Indian — Vedic</option>
+            <option value="Norse (Viking)">Norse — Viking</option>
+            <option value="Mesoamerican (Aztec)">Mesoamerican — Aztec</option>
+            <option value="Aboriginal Australian">Aboriginal Australian</option>
+            <option value="Celtic (Irish)">Celtic — Irish</option>
+            <option value="Ancient Egyptian">Ancient Egyptian</option>
+            <option value="Persian (Zoroastrian)">Persian — Zoroastrian</option>
+            <option value="Andean (Incan)">Andean — Incan</option>
+          </select>
+        </div>
+        <div>
+          <label>Story Tone</label>
+          <select id="tone">
+            <option value="mythic and poetic">Mythic &amp; poetic</option>
+            <option value="cautionary and wise">Cautionary &amp; wise</option>
+            <option value="adventurous and heroic">Adventurous &amp; heroic</option>
+            <option value="gentle and lyrical">Gentle &amp; lyrical</option>
+            <option value="humorous and trickster-like">Humorous &amp; trickster</option>
+            <option value="solemn and ceremonial">Solemn &amp; ceremonial</option>
+          </select>
+        </div>
+        <div class="full">
+          <label>Themes (select one or more)</label>
+          <div class="tag-row" id="tags">
+            <span class="tag active" data-val="origins of the world">Origins of the world</span>
+            <span class="tag" data-val="love and sacrifice">Love &amp; sacrifice</span>
+            <span class="tag" data-val="courage and trials">Courage &amp; trials</span>
+            <span class="tag" data-val="nature spirits and animals">Nature spirits</span>
+            <span class="tag" data-val="trickery and wisdom">Trickery &amp; wisdom</span>
+            <span class="tag" data-val="death and the afterlife">Death &amp; afterlife</span>
+            <span class="tag" data-val="light conquering darkness">Light &amp; darkness</span>
+            <span class="tag" data-val="the power of memory and ancestors">Ancestors &amp; memory</span>
+          </div>
+        </div>
+        <div class="full">
+          <label>Custom prompt (optional)</label>
+          <input type="text" id="custom" placeholder="e.g. include a river goddess and a lost child…" />
         </div>
       </div>
-      <div class="full">
-        <label>Custom prompt (optional)</label>
-        <input type="text" id="custom" placeholder="e.g. include a river goddess and a lost child…" />
-      </div>
     </div>
-  </div>
 
-  <button class="btn-generate" id="genBtn" onclick="generateStory()">✦ Generate story</button>
+    <button class="btn-generate" id="genBtn" onclick="generateStory()">✦ Generate story</button>
 
-  <div<!-- Character Animation Box -->
-<div class="character-box" id="characterBox">
-  <div class="character" id="characterEmoji">🧙</div>
-  <p style="color: var(--muted); font-size: 13px; margin-top: 8px;" id="characterName">Storyteller</p>
-<div class="story-card" id="storyCard">
-    <div class="story-header">
-      <div class="badges">
-        <span class="badge badge-c" id="badgeCulture"></span>
-        <span class="badge badge-t" id="badgeTone"></span>
-      </div>
-      <div class="story-actions">
-        <button class="icon-btn" onclick="copyStory()">⎘ Copy</button>
-        <button class="icon-btn" onclick="newStory()">↺ New story</button>
-      </div>
+    <!-- Character Animation Box -->
+    <div class="character-box" id="characterBox">
+      <div class="character" id="characterEmoji">🧙</div>
+      <p style="color: var(--muted); font-size: 13px; margin-top: 8px;" id="characterName">Storyteller</p>
     </div>
-    <div class="story-body">
-      <div class="story-title" id="storyTitle"></div>
-      <div class="story-text" id="storyText"></div>
-    </div>
-    <div class="audio-bar">
-      <button class="play-btn" id="playBtn" onclick="speakStory()" disabled title="Read aloud">▶</button>
-      <div class="audio-info">
-        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-        <span class="audio-label" id="audioLabel">Ready to narrate via browser speech</span>
-      </div>
-    </div>
-  </div><div class="slideshow-box" id="slideshowBox">
-      <div class="slideshow-images" id="slideshowImages">
-        <div class="slideshow-loading" id="slideshowLoading">
-          <div class="dots"><span></span><span></span><span></span></div>
-          Generating illustrations...
+
+    <div class="story-card" id="storyCard">
+      <div class="story-header">
+        <div class="badges">
+          <span class="badge badge-c" id="badgeCulture"></span>
+          <span class="badge badge-t" id="badgeTone"></span>
+        </div>
+        <div class="story-actions">
+          <button class="icon-btn" onclick="copyStory()">⎘ Copy</button>
+          <button class="icon-btn" onclick="newStory()">↺ New story</button>
         </div>
       </div>
-      <div class="slideshow-dots" id="slideshowDots"></div>
+      <div class="story-body">
+        <div class="story-title" id="storyTitle"></div>
+        <div class="story-text" id="storyText"></div>
+      </div>
+      <div class="audio-bar">
+        <button class="play-btn" id="playBtn" onclick="speakStory()" disabled title="Read aloud">▶</button>
+        <div class="audio-info">
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <span class="audio-label" id="audioLabel">Ready to narrate via browser speech</span>
+        </div>
+      </div>
+
+      <!-- AI Image Slideshow -->
+      <div class="slideshow-box" id="slideshowBox">
+        <div class="slideshow-images" id="slideshowImages">
+          <div class="slideshow-loading" id="slideshowLoading">
+            <div class="dots"><span></span><span></span><span></span></div>
+            Generating illustrations...
+          </div>
+        </div>
+        <div class="slideshow-dots" id="slideshowDots"></div>
+      </div>
     </div>
 
-  <footer>Member 2 · AI Integration · Story API + Audio Narration · Prototype</footer>
+    <footer>Member 2 · AI Integration · Story API + Audio Narration · Prototype</footer>
 
+  </div>
 </div>
+
 <script>
- const HF_API_KEY = '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'; // ← Apni Hugging Face key yahan paste karo (hf_...)
-  const GROQ_API_KEY = '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'; // ← Apni Groq key yahan paste karo (gsk_...)
+  const HF_API_KEY = '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';
+  const GROQ_API_KEY = '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'; // ← Apni Groq key yahan paste karo
 
   let activeTags = new Set(['origins of the world']);
   let currentStory = '';
@@ -545,6 +562,8 @@
     playBtn.disabled = true;
     document.getElementById('audioLabel').textContent = 'Generating…';
     document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('slideshowBox').style.display = 'none';
+    document.getElementById('characterBox').style.display = 'none';
 
     const prompt = `You are a master cultural storyteller. Write an original short story (260-330 words) deeply rooted in ${culture} tradition.
 
@@ -591,32 +610,10 @@ No preamble, no commentary outside this format.`;
       if (sm) textEl.textContent = sm[1].trim();
 
       currentStory = textEl.textContent.trim();
-     generateSlideshow(culture, currentStory);
-      // Character animation
-const characters = {
-  'West African': { emoji: '🥁', name: 'Yoruba Drummer', anim: 'dance' },
-  'Japanese': { emoji: '⛩️', name: 'Shinto Priest', anim: 'float' },
-  'Indian': { emoji: '💃', name: 'Indian Dancer', anim: 'dance' },
-  'Norse': { emoji: '⚔️', name: 'Viking Warrior', anim: 'walk' },
-  'Mesoamerican': { emoji: '🦅', name: 'Aztec Eagle', anim: 'float' },
-  'Aboriginal': { emoji: '🪃', name: 'Aboriginal Elder', anim: 'walk' },
-  'Celtic': { emoji: '🍀', name: 'Celtic Druid', anim: 'dance' },
-  'Egyptian': { emoji: '𓂀', name: 'Egyptian Pharaoh', anim: 'walk' },
-  'Persian': { emoji: '🌙', name: 'Persian Mystic', anim: 'float' },
-  'Andean': { emoji: '🦙', name: 'Incan Llama', anim: 'walk' }
-};
 
-const selectedCulture = culture.split(' ')[0];
-const char = characters[selectedCulture] || { emoji: '📖', name: 'Storyteller', anim: 'dance' };
+      showCharacter(culture);
+      generateSlideshow(culture, currentStory);
 
-const charBox = document.getElementById('characterBox');
-const charEmoji = document.getElementById('characterEmoji');
-const charName = document.getElementById('characterName');
-
-charEmoji.textContent = char.emoji;
-charEmoji.className = 'character ' + char.anim;
-charName.textContent = char.name;
-charBox.style.display = 'block';
       textEl.classList.remove('streaming');
       playBtn.disabled = false;
       document.getElementById('audioLabel').textContent = 'Click ▶ to hear this story narrated';
@@ -628,100 +625,110 @@ charBox.style.display = 'block';
 
     btn.disabled = false;
     btn.innerHTML = '✦ Generate story';
+  }
+
+  function showCharacter(culture) {
+    const characters = {
+      'West African': { emoji: '🥁', name: 'Yoruba Drummer', anim: 'dance' },
+      'Japanese': { emoji: '⛩️', name: 'Shinto Priest', anim: 'float' },
+      'Indian': { emoji: '💃', name: 'Indian Dancer', anim: 'dance' },
+      'Norse': { emoji: '⚔️', name: 'Viking Warrior', anim: 'walk' },
+      'Mesoamerican': { emoji: '🦅', name: 'Aztec Eagle', anim: 'float' },
+      'Aboriginal': { emoji: '🪃', name: 'Aboriginal Elder', anim: 'walk' },
+      'Celtic': { emoji: '🍀', name: 'Celtic Druid', anim: 'dance' },
+      'Ancient': { emoji: '𓂀', name: 'Egyptian Pharaoh', anim: 'walk' },
+      'Persian': { emoji: '🌙', name: 'Persian Mystic', anim: 'float' },
+      'Andean': { emoji: '🦙', name: 'Incan Llama', anim: 'walk' }
+    };
+
+    const selectedCulture = culture.split(' ')[0];
+    const char = characters[selectedCulture] || { emoji: '📖', name: 'Storyteller', anim: 'dance' };
+
+    const charBox = document.getElementById('characterBox');
+    const charEmoji = document.getElementById('characterEmoji');
+    const charName = document.getElementById('characterName');
+
+    charEmoji.textContent = char.emoji;
+    charEmoji.className = 'character ' + char.anim;
+    charName.textContent = char.name;
+    charBox.style.display = 'block';
+  }
+
   async function generateSlideshow(culture, story) {
-  const box = document.getElementById('slideshowBox');
-  const imagesDiv = document.getElementById('slideshowImages');
-  const dotsDiv = document.getElementById('slideshowDots');
+    const box = document.getElementById('slideshowBox');
+    const imagesDiv = document.getElementById('slideshowImages');
+    const dotsDiv = document.getElementById('slideshowDots');
 
-  box.style.display = 'block';
+    box.style.display = 'block';
 
-  const numImages = 12;
-  const chunkSize = Math.floor(story.length / numImages);
-  const scenes = [];
-  for (let i = 0; i < numImages; i++) {
-    const chunk = story.slice(i * chunkSize, (i + 1) * chunkSize);
-    scenes.push(`${culture} mythology art style, cinematic illustration: ${chunk}`);
-  }
-
-  const urls = scenes.map((scene, i) => {
-    const cleanPrompt = encodeURIComponent(scene.replace(/[^\w\s,.]/g, ' ').slice(0, 200));
-    return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=500&seed=${Date.now() + i}&nologo=true`;
-  });
-
-  let loadedCount = 0;
-  imagesDiv.innerHTML = `<div class="slideshow-loading" id="slideshowLoading"><div class="dots"><span></span><span></span><span></span></div>Loading illustrations (<span id="loadCount">0</span>/${numImages})...</div>`;
-  dotsDiv.innerHTML = '';
-
-function loadOneImage(url) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      const timeout = setTimeout(() => resolve(null), 20000);
-      img.onload = () => { clearTimeout(timeout); resolve(url); };
-      img.onerror = () => { clearTimeout(timeout); resolve(null); };
-      img.src = url;
-    });
-  }
-
-  const loadedUrls = [];
-  for (let i = 0; i < urls.length; i++) {
-    const url = await loadOneImage(urls[i]);
-    loadedCount++;
-    const counter = document.getElementById('loadCount');
-    if (counter) counter.textContent = loadedCount;
-    if (url) loadedUrls.push(url);
-    if (i < urls.length - 1) {
-      await new Promise(r => setTimeout(r, 16000));
+    const numImages = 8;
+    const chunkSize = Math.floor(story.length / numImages);
+    const scenes = [];
+    for (let i = 0; i < numImages; i++) {
+      const chunk = story.slice(i * chunkSize, (i + 1) * chunkSize);
+      scenes.push(`${culture} mythology art style, cinematic illustration: ${chunk}`);
     }
+
+    const urls = scenes.map((scene, i) => {
+      const cleanPrompt = encodeURIComponent(scene.replace(/[^\w\s,.]/g, ' ').slice(0, 200));
+      return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=500&seed=${Date.now() + i}&nologo=true`;
+    });
+
+    let loadedCount = 0;
+    imagesDiv.innerHTML = `<div class="slideshow-loading" id="slideshowLoading"><div class="dots"><span></span><span></span><span></span></div>Loading illustrations (<span id="loadCount">0</span>/${numImages})… this takes about 2 minutes</div>`;
+    dotsDiv.innerHTML = '';
+
+    function loadOneImage(url) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const timeout = setTimeout(() => resolve(null), 20000);
+        img.onload = () => { clearTimeout(timeout); resolve(url); };
+        img.onerror = () => { clearTimeout(timeout); resolve(null); };
+        img.src = url;
+      });
+    }
+
+    const loadedUrls = [];
+    for (let i = 0; i < urls.length; i++) {
+      const url = await loadOneImage(urls[i]);
+      loadedCount++;
+      const counter = document.getElementById('loadCount');
+      if (counter) counter.textContent = loadedCount;
+      if (url) loadedUrls.push(url);
+      if (i < urls.length - 1) {
+        await new Promise(r => setTimeout(r, 16000));
+      }
+    }
+
+    if (loadedUrls.length === 0) {
+      imagesDiv.innerHTML = `<div class="slideshow-loading">Could not load illustrations</div>`;
+      return;
+    }
+
+    imagesDiv.innerHTML = loadedUrls.map((url, i) =>
+      `<img src="${url}" class="slide-img${i === 0 ? ' active' : ''}" />`
+    ).join('');
+
+    dotsDiv.innerHTML = loadedUrls.map((_, i) =>
+      `<div class="slide-dot${i === 0 ? ' active' : ''}"></div>`
+    ).join('');
+
+    let current = 0;
+    setInterval(() => {
+      const imgs = imagesDiv.querySelectorAll('.slide-img');
+      const dots = dotsDiv.querySelectorAll('.slide-dot');
+      if (imgs.length === 0) return;
+      imgs[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (current + 1) % imgs.length;
+      imgs[current].classList.add('active');
+      dots[current].classList.add('active');
+    }, 3500);
   }
-  if (loadedUrls.length === 0) {
-    imagesDiv.innerHTML = `<div class="slideshow-loading">Could not load illustrations</div>`;
-    return;
-  }
 
-  imagesDiv.innerHTML = loadedUrls.map((url, i) =>
-    `<img src="${url}" class="slide-img${i === 0 ? ' active' : ''}" />`
-  ).join('');
-
-  dotsDiv.innerHTML = loadedUrls.map((_, i) =>
-    `<div class="slide-dot${i === 0 ? ' active' : ''}"></div>`
-  ).join('');
-
-  let current = 0;
-  setInterval(() => {
-    const imgs = imagesDiv.querySelectorAll('.slide-img');
-    const dots = dotsDiv.querySelectorAll('.slide-dot');
-    if (imgs.length === 0) return;
-    imgs[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = (current + 1) % imgs.length;
-    imgs[current].classList.add('active');
-    dots[current].classList.add('active');
-  }, 3500);
-}
-
-
-  imagesDiv.innerHTML = loadedUrls.map((url, i) =>
-    `<img src="${url}" class="slide-img${i === 0 ? ' active' : ''}" />`
-  ).join('');
-
-  dotsDiv.innerHTML = loadedUrls.map((_, i) =>
-    `<div class="slide-dot${i === 0 ? ' active' : ''}"></div>`
-  ).join('');
-
-  let current = 0;
-  setInterval(() => {
-    const imgs = imagesDiv.querySelectorAll('.slide-img');
-    const dots = dotsDiv.querySelectorAll('.slide-dot');
-    if (imgs.length === 0) return;
-    imgs[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = (current + 1) % imgs.length;
-    imgs[current].classList.add('active');
-    dots[current].classList.add('active');
-  }, 3500);
-}
   function newStory() {
     document.getElementById('storyCard').classList.remove('visible');
+    document.getElementById('characterBox').style.display = 'none';
     currentStory = '';
   }
 
@@ -820,14 +827,11 @@ function loadOneImage(url) {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Login button
   window.googleLogin = async function() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       document.getElementById('userName').textContent = 'Welcome, ' + user.displayName;
-      document.getElementById('loginBtn').style.display = 'none';
-      document.getElementById('logoutBtn').style.display = 'block';
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
     } catch(e) {
@@ -835,23 +839,18 @@ function loadOneImage(url) {
     }
   }
 
-  // Logout button
   window.googleLogout = async function() {
     await signOut(auth);
     document.getElementById('userName').textContent = '';
-    document.getElementById('loginBtn').style.display = 'block';
-    document.getElementById('logoutBtn').style.display = 'none';
     document.getElementById('loginPage').style.display = 'flex';
     document.getElementById('mainApp').style.display = 'none';
-    
   }
 
-  // Check login state
   onAuthStateChanged(auth, (user) => {
     if (user) {
       document.getElementById('userName').textContent = 'Welcome, ' + user.displayName;
-      document.getElementById('loginBtn').style.display = 'none';
-      document.getElementById('logoutBtn').style.display = 'block';
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
     }
   });
 </script>
