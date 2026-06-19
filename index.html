@@ -846,11 +846,14 @@ No preamble, no commentary outside this format.`;
     document.getElementById('mainApp').style.display = 'none';
   }
 
-  onAuthStateChanged(auth, (user) => {
+ onAuthStateChanged(auth, (user) => {
     if (user) {
       document.getElementById('userName').textContent = 'Welcome, ' + user.displayName;
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
+    } else {
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('mainApp').style.display = 'none';
     }
   });
 </script>
